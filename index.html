@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="lib/marked.js"></script>
+</head>
+<body>
+
+  <input type="file" id="files" multiple />
+  <div id="list"></div>
+
+  <script>
+    function handleFileSelect(e) {
+      [].forEach.call(e.target.files, function(f) {
+
+        var reader = new FileReader()
+        reader.onload = (function() {
+          return function(e) {
+            document.querySelector('#list').innerHTML = marked(e.target.result)
+          }
+        })(f)
+
+        reader.readAsText(f)
+      })
+    }
+
+    document.getElementById('files')
+      .addEventListener('change', handleFileSelect, false)
+  </script>
+</body>
+</html>
