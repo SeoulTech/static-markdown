@@ -1,32 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title></title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
-</head>
-<body>
+<html>
+  <head>
+    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+      @import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
 
-  <input type="file" id="files" multiple />
-  <div id="list"></div>
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+      .content {display: none}
+    </style>
+  </head>
+  <body>
+    <input type="file" id="files" multiple />
+    <textarea class="content" id="source"></textarea>
 
-  <script>
-    function handleFileSelect(e) {
-      [].forEach.call(e.target.files, function(f) {
+    <script src="http://gnab.github.io/remark/downloads/remark-latest.min.js" type="text/javascript"></script>
 
-        var reader = new FileReader()
-        reader.onload = (function() {
-          return function(e) {
-            document.querySelector('#list').innerHTML = marked(e.target.result)
-          }
-        })(f)
+    <script>
+      function handleFileSelect(e) {
+        var content = document.querySelector('#source')
+        content.style.display = 'block'
+        Array.prototype.forEach.call(e.target.files, function(f) {
+          var reader = new FileReader()
 
-        reader.readAsText(f)
-      })
-    }
+          reader.onload = (function() {
+            return function(e) {
+              content.innerText = e.target.result
+              document.querySelector('#files').style.display = 'none'
+              remark.create()
+            }
+          })()
 
-    document.getElementById('files')
-      .addEventListener('change', handleFileSelect, false)
-  </script>
-</body>
+          reader.readAsText(f)
+        })
+      }
+      document.getElementById('files')
+        .addEventListener('change', handleFileSelect, false)
+    </script>
+  </body>
 </html>
